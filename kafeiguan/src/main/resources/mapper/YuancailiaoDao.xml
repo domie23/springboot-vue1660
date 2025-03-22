@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.YuancailiaoDao">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.yuancailiao_uuid_number as yuancailiaoUuidNumber
+        ,a.yuancailiao_name as yuancailiaoName
+        ,a.yuancailiao_photo as yuancailiaoPhoto
+        ,a.yuancailiao_danwei as yuancailiaoDanwei
+        ,a.yuancailiao_types as yuancailiaoTypes
+        ,a.yuancailiao_kucun_number as yuancailiaoKucunNumber
+        ,a.yuancailiao_price as yuancailiaoPrice
+        ,a.yuancailiao_jinjia_money as yuancailiaoJinjiaMoney
+        ,a.yuancailiao_clicknum as yuancailiaoClicknum
+        ,a.yuancailiao_content as yuancailiaoContent
+        ,a.create_time as createTime
+    </sql>
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.YuancailiaoView" >
+        SELECT
+        <include refid="Base_Column_List" />
+
+--         级联表的字段
+
+        FROM yuancailiao  a
+
+        <where>
+            <if test="params.ids != null">
+                and a.id in
+                <foreach item="item" index="index" collection="params.ids" open="(" separator="," close=")">
+                #{item}
+                </foreach>
+            </if>
+            <if test=" params.yuancailiaoUuidNumber != '' and params.yuancailiaoUuidNumber != null and params.yuancailiaoUuidNumber != 'null' ">
+                and a.yuancailiao_uuid_number like CONCAT('%',#{params.yuancailiaoUuidNumber},'%')
+            </if>
+            <if test=" params.yuancailiaoName != '' and params.yuancailiaoName != null and params.yuancailiaoName != 'null' ">
+                and a.yuancailiao_name like CONCAT('%',#{params.yuancailiaoName},'%')
+            </if>
+            <if test=" params.yuancailiaoDanwei != '' and params.yuancailiaoDanwei != null and params.yuancailiaoDanwei != 'null' ">
+                and a.yuancailiao_danwei like CONCAT('%',#{params.yuancailiaoDanwei},'%')
+            </if>
+            <if test="params.yuancailiaoTypes != null and params.yuancailiaoTypes != ''">
+                and a.yuancailiao_types = #{params.yuancailiaoTypes}
+            </if>
+            <if test="params.yuancailiaoKucunNumberStart != null and params.yuancailiaoKucunNumberStart != ''">
+                <![CDATA[  and a.yuancailiao_kucun_number >= #{params.yuancailiaoKucunNumberStart}   ]]>
+            </if>
+            <if test="params.yuancailiaoKucunNumberEnd != null and params.yuancailiaoKucunNumberEnd != ''">
+                <![CDATA[  and a.yuancailiao_kucun_number <= #{params.yuancailiaoKucunNumberEnd}   ]]>
+            </if>
+             <if test="params.yuancailiaoKucunNumber != null and params.yuancailiaoKucunNumber != ''">
+                and a.yuancailiao_kucun_number = #{params.yuancailiaoKucunNumber}
+             </if>
+            <if test="params.yuancailiaoPriceStart != null and params.yuancailiaoPriceStart != ''">
+                <![CDATA[  and a.yuancailiao_price >= #{params.yuancailiaoPriceStart}   ]]>
+            </if>
+            <if test="params.yuancailiaoPriceEnd != null and params.yuancailiaoPriceEnd != ''">
+                <![CDATA[  and a.yuancailiao_price <= #{params.yuancailiaoPriceEnd}   ]]>
+            </if>
+             <if test="params.yuancailiaoPrice != null and params.yuancailiaoPrice != ''">
+                and a.yuancailiao_price = #{params.yuancailiaoPrice}
+             </if>
+            <if test="params.yuancailiaoJinjiaMoneyStart != null ">
+                <![CDATA[  and a.yuancailiao_jinjia_money >= #{params.yuancailiaoJinjiaMoneyStart}   ]]>
+            </if>
+            <if test="params.yuancailiaoJinjiaMoneyEnd != null ">
+                <![CDATA[  and a.yuancailiao_jinjia_money <= #{params.yuancailiaoJinjiaMoneyEnd}   ]]>
+            </if>
+            <if test="params.yuancailiaoClicknumStart != null and params.yuancailiaoClicknumStart != ''">
+                <![CDATA[  and a.yuancailiao_clicknum >= #{params.yuancailiaoClicknumStart}   ]]>
+            </if>
+            <if test="params.yuancailiaoClicknumEnd != null and params.yuancailiaoClicknumEnd != ''">
+                <![CDATA[  and a.yuancailiao_clicknum <= #{params.yuancailiaoClicknumEnd}   ]]>
+            </if>
+             <if test="params.yuancailiaoClicknum != null and params.yuancailiaoClicknum != ''">
+                and a.yuancailiao_clicknum = #{params.yuancailiaoClicknum}
+             </if>
+            <if test=" params.yuancailiaoContent != '' and params.yuancailiaoContent != null and params.yuancailiaoContent != 'null' ">
+                and a.yuancailiao_content like CONCAT('%',#{params.yuancailiaoContent},'%')
+            </if>
+
+        </where>
+
+        order by a.${params.orderBy} desc 
+    </select>
+
+</mapper>
